@@ -15,7 +15,7 @@ harakat = [character for character in "ًٌٍَُِّْ"]  # All of the harakat
 
 def add_mosahmat_to_end(doc, mosahmat_items):
     # Add the mosahmat content at the end of the document
-    doc.add_paragraph("\n\n:المعاني\n", style="Heading 1").alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+    doc.add_paragraph("\n:المعاني", style="Heading 1").alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
     for item in mosahmat_items:
         h2_text = item.find("h2").get_text().strip() if item.find("h2") else ""
@@ -24,11 +24,10 @@ def add_mosahmat_to_end(doc, mosahmat_items):
         h4_text = h4_text.replace(".", "").replace("\n", "") #.replace("\r", "")
 
         if h2_text:
-            paragraph_h2 = doc.add_paragraph(h2_text)
+            paragraph_h2 = doc.add_paragraph(h2_text, style="Heading 2")
             paragraph_h2.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
-            paragraph_h2.style.font.size = Pt(12)  # Adjust font size for h2
         if h4_text:
-            paragraph_h2 = doc.add_paragraph(h2_text)
+            paragraph_h2 = doc.add_paragraph(h4_text)
             paragraph_h2.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
             paragraph_h2.style.font.size = Pt(12)  # Adjust font size for h2
 
@@ -64,7 +63,12 @@ def generate_qasida_pdf():
         alshaer_splitted = "_".join(map(str, alshaer.split()))
 
         # Add poet name as heading
-        doc.add_heading(alshaer + "\n", level=0).alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
+        doc.add_heading(alshaer, level=0).alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
+
+        bahr_alqasida = soup.find_all("div", class_="col-6 col-md-3")[2].get_text().strip()
+        paragraph_albahr = doc.add_paragraph(":" + "من " + bahr_alqasida, style="Heading 2")
+        paragraph_albahr.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
+
 
         # Locate the div with id "poem_content" and find all h3 tags within it
         poem_content = soup.find("div", id="poem_content")
@@ -109,7 +113,7 @@ def generate_qasida_pdf():
 
             # Open the PDF file
             system(f"start {pdf_filename}")
-            # messagebox.showinfo("Success", f"'{pdf_filename}' حفظت القصيد بالملف: ")
+            messagebox.showinfo("Success", f"'{pdf_filename}' حفظت القصيدة بالملف: ")
         else:
             messagebox.showerror("Content Error", "القصيدة يجب أن تكون من موقع الديوان")
     else:
@@ -130,7 +134,7 @@ if __name__ == "__main__":
 
     tk.Label(root, text=":الصق الرابط من موقع الديوان").grid(row=0, column=1, padx=10, pady=10)
     include_mosahamat_checkbox = tk.Checkbutton(
-        root, text="إضافة معاني الكلمات", variable=include_mosahamat
+        root, text="إضافة معاني القصيدة", variable=include_mosahamat
     )
     include_mosahamat_checkbox.grid(row=1, column=0, columnspan=2, pady=5)
 
