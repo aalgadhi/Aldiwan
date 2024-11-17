@@ -3,13 +3,10 @@ from bs4 import BeautifulSoup
 from docx import Document
 from docx.shared import Pt
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
-from docx.oxml import OxmlElement
-from docx.oxml.ns import qn
 from docx2pdf import convert
-from os import system
+from os import startfile, makedirs
 import tkinter as tk
 from tkinter import messagebox
-from tkinter import PhotoImage
 
 harakat = [character for character in "ًٌٍَُِّْ"]  # All of the harakat
 
@@ -100,19 +97,18 @@ def generate_qasida_pdf():
                     add_mosahmat_to_end(doc, mosahmat_items)
 
             # Generate file names
-            system(f"mkdir qasidas")
+            makedirs("qasidas", exist_ok=True)
             file_name = f"{matlaa_alqasida_splitted}_{alshaer_splitted}"
-            docx_filename = f"qasidas/{file_name}.docx"
-            pdf_filename = f"qasidas/{file_name}.pdf"
+            docx_filename = f"qasidas\\{file_name}.docx"
+            pdf_filename = f"qasidas\\{file_name}.pdf"
 
             # Save the document as a .docx file
             doc.save(docx_filename)
 
             # Convert the .docx file to a PDF
             convert(docx_filename, pdf_filename)
-
             # Open the PDF file
-            system(f"start {pdf_filename}")
+            startfile(pdf_filename)
             messagebox.showinfo("Success", f"'{pdf_filename}' حفظت القصيدة بالملف: ")
         else:
             messagebox.showerror("Content Error", "القصيدة يجب أن تكون من موقع الديوان")
@@ -123,10 +119,10 @@ def generate_qasida_pdf():
 if __name__ == "__main__":
     # Create the GUI window
     root = tk.Tk()
-    root.title("Qasida PDF Generator")
+    root.title("Aldiwan")
     include_mosahamat = tk.BooleanVar(value=True)
     # Set the window icon to "logo.ico" for both title bar and taskbar
-    root.iconbitmap("logo.ico")
+    # root.iconbitmap("logo.ico")
 
     # URL input label and entry field
     url_entry = tk.Entry(root, width=50)
