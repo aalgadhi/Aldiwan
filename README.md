@@ -9,7 +9,7 @@
 
 pip install pyinstaller (اذا لم تكن عندك المكتبة)
 
-pyinstaller --onefile main.py
+pyinstaller --onefile --icon=logo.ico --name=aldiwan main.py
 
 
 ### Aldiwan
@@ -19,6 +19,6 @@ To build an exe app you can use pyinstaller in the terminal as the following:
 
 pip install pyinstaller (if you do not have the library)
 
-pyinstaller --onefile main.py
+pyinstaller --onefile --icon=logo.ico --name=aldiwan main.py
 
 You will find the build in a folder called dest.
